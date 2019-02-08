@@ -73,16 +73,16 @@
       "@prepare-for-pantheon",
       "composer install --optimize-autoloader --no-dev"
     ],
+    "lint": "find web/modules/custom web/themes/custom -name '*.php' -exec php -l {} \\;",
+    "code-sniff": "echo 'No code sniff step defined.'",
+    "unit-test": "echo 'No unit test step defined.'",
+    "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
+    "prepare-for-pantheon": "DrupalProject\\composer\\ScriptHandler::prepareForPantheon",
     "post-install-cmd": [
       "@drupal-scaffold",
-      "@push",
-      "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit",
       "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
     ],
     "post-update-cmd": [
-      "@drupal-scaffold",
-      "@push",
-      "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit",
       "DrupalProject\\composer\\ScriptHandler::createRequiredFiles",
       "find .circleci/scripts/pantheon/ -type f | xargs chmod 755",
       "find tests/scripts/ -type f | xargs chmod 755"
@@ -91,7 +91,6 @@
       "@drupal-scaffold",
       "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
     ],
-    "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
     "release-version": "Acquia\\Lightning\\Composer\\ReleaseVersion::execute",
     "nuke": "rm -r -f docroot vendor",
     "pull": "Acquia\\Lightning\\Commands\\FileCommands::pull",
