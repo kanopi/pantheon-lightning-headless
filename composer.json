@@ -23,7 +23,6 @@
     "drupal/facets": "^1.2"
   },
   "require": {
-    "php": ">=7.0.8",
     "composer/installers": "^1.0.20",
     "drupal-composer/drupal-scaffold": "^2.0.1",
     "drupal/config_direct_save": "^1.0",
@@ -61,10 +60,7 @@
     "preferred-install": {
       "drupal/core": "dist"
     },
-    "sort-packages": true,
-    "platform": {
-      "php": "7.0.8"
-    }
+    "sort-packages": true
   },
   "autoload": {
     "classmap": [
