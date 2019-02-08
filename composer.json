@@ -1,89 +1,140 @@
 {
-    "name": "acquia/headless_lightning",
-    "description": "Drupal Lightning as a backend for fully decoupled applications.",
-    "type": "drupal-profile",
-    "license": "GPL-2.0-or-later",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "require-dev": {
-        "drupal/devel": "^1.0",
-        "drupal/console": "^1.0.0",
-        "acquia/lightning_dev": "dev-8.x-1.x",
-        "drupal/schema_metatag": "^1.3",
-        "drupal/facets": "^1.2"
+  "name": "kanopi/headless_lightning",
+  "description": "Drupal Lightning as a backend for fully decoupled applications.",
+  "type": "drupal-profile",
+  "license": "GPL-2.0-or-later",
+  "minimum-stability": "alpha",
+  "prefer-stable": true,
+  "require-dev": {
+    "mikey179/vfsstream": "^1.2",
+    "behat/behat": "3.*",
+    "behat/mink": "^1.7",
+    "behat/mink-extension": "^2.2",
+    "behat/mink-goutte-driver": "^1.2",
+    "jcalderonzumba/gastonjs": "^1.0.2",
+    "jcalderonzumba/mink-phantomjs-driver": "^0.3.1",
+    "drupal/drupal-extension": "^3.1",
+    "drupal/devel": "^1.0",
+    "drupal/console": "^1.0.0",
+    "acquia/lightning_dev": "dev-8.x-1.x",
+    "drupal/schema_metatag": "^1.3",
+    "drupal/facets": "^1.2",
+    "phpunit/phpunit": "^4.8",
+    "symfony/css-selector": "^2.8"
+  },
+  "require": {
+    "composer/installers": "^1.0.20",
+    "drupal-composer/drupal-scaffold": "^2.0.1",
+    "drupal/config_direct_save": "^1.0",
+    "drupal/config_installer": "^1.0",
+    "drupal/simple_block": "^1.0@beta",
+    "drupal/console": "^1",
+    "cweagans/composer-patches": "^1.6.4",
+    "acquia/lightning": "dev-8.x-3.x",
+    "rvtraveller/qs-composer-installer": "^1.1",
+    "drush-ops/behat-drush-endpoint": "^8",
+    "pantheon-systems/quicksilver-pushback": "~1",
+    "webflo/drupal-core-strict": "^8",
+    "zaporylie/composer-drupal-optimizations": "^1.0"
+  },
+  "conflict": {
+    "drupal/drupal": "*"
+  },
+  "repositories": {
+    "drupal": {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
     },
-    "require": {
-        "drupal-composer/drupal-scaffold": "^2.0.0",
-        "cweagans/composer-patches": "^1.6.4",
-        "acquia/lightning": "dev-8.x-3.x"
+    "asset-packagist": {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
     },
-    "repositories": {
-        "drupal": {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
-        },
-        "asset-packagist": {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        },
-        "dev": {
-            "type": "github",
-            "url": "https://github.com/acquia/lightning-dev",
-            "no-api": true
-        }
-    },
-    "config": {
-        "preferred-install": {
-            "drupal/core": "dist"
-        },
-        "platform": {
-            "php": "7.0.8"
-        }
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "@drupal-scaffold",
-            "@push",
-            "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit"
-        ],
-        "post-update-cmd": [
-            "@drupal-scaffold",
-            "@push",
-            "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit"
-        ],
-        "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
-        "release-version": "Acquia\\Lightning\\Composer\\ReleaseVersion::execute",
-        "nuke": "rm -r -f docroot vendor",
-        "pull": "Acquia\\Lightning\\Commands\\FileCommands::pull",
-        "push": "Acquia\\Lightning\\Commands\\FileCommands::push"
-    },
-    "extra": {
-        "installer-types": [
-            "bower-asset",
-            "npm-asset"
-        ],
-        "installer-paths": {
-            "docroot/core": [
-                "type:drupal-core"
-            ],
-            "docroot/modules/contrib/{$name}": [
-                "type:drupal-module"
-            ],
-            "docroot/profiles/contrib/{$name}": [
-                "type:drupal-profile"
-            ],
-            "docroot/themes/contrib/{$name}": [
-                "type:drupal-theme"
-            ],
-            "docroot/libraries/{$name}": [
-                "type:drupal-library",
-                "type:bower-asset",
-                "type:npm-asset"
-            ]
-        },
-        "enable-patching": true,
-        "patchLevel": {
-            "drupal/core": "-p2"
-        }
+    "dev": {
+      "type": "github",
+      "url": "https://github.com/acquia/lightning-dev",
+      "no-api": true
     }
+  },
+  "config": {
+    "preferred-install": {
+      "drupal/core": "dist"
+    },
+    "platform": {
+      "php": "7.0.8"
+    }
+  },
+  "autoload": {
+    "classmap": [
+      "scripts/composer/ScriptHandler.php"
+    ]
+  },
+  "scripts": {
+    "build-assets": [
+      "@prepare-for-pantheon",
+      "composer install --optimize-autoloader --no-dev"
+    ],
+    "post-install-cmd": [
+      "@drupal-scaffold",
+      "@push",
+      "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit",
+      "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+    ],
+    "post-update-cmd": [
+      "@drupal-scaffold",
+      "@push",
+      "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit",
+      "DrupalProject\\composer\\ScriptHandler::createRequiredFiles",
+      "find .circleci/scripts/pantheon/ -type f | xargs chmod 755",
+      "find tests/scripts/ -type f | xargs chmod 755"
+    ],
+    "post-create-project-cmd": [
+      "@drupal-scaffold",
+      "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+    ],
+    "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
+    "release-version": "Acquia\\Lightning\\Composer\\ReleaseVersion::execute",
+    "nuke": "rm -r -f docroot vendor",
+    "pull": "Acquia\\Lightning\\Commands\\FileCommands::pull",
+    "push": "Acquia\\Lightning\\Commands\\FileCommands::push"
+  },
+  "extra": {
+    "installer-types": [
+      "bower-asset",
+      "npm-asset"
+    ],
+    "installer-paths": {
+      "web/core": [
+        "type:drupal-core"
+      ],
+      "web/modules/contrib/{$name}": [
+        "type:drupal-module"
+      ],
+      "web/profiles/contrib/{$name}": [
+        "type:drupal-profile"
+      ],
+      "web/themes/contrib/{$name}": [
+        "type:drupal-theme"
+      ],
+      "drush/contrib/{$name}": [
+        "type:drupal-drush"
+      ],
+      "web/libraries/{$name}": [
+        "type:drupal-library",
+        "type:bower-asset",
+        "type:npm-asset"
+      ]
+    },
+    "build-env": {
+      "install-cms": [
+        "drush site-install headless_lightning --account-mail={account-mail} --account-name={account-name} --account-pass={account-pass} --site-mail={site-mail} --site-name={site-name} --yes",
+        "drush pm-enable config_direct_save simple_block --yes",
+        "drush pm-uninstall block_content --yes"
+      ],
+      "export-configuration": "drush config-export --yes"
+    },
+    "enable-patching": true,
+    "patchLevel": {
+      "drupal/core": "-p2"
+    }
+  }
 }
