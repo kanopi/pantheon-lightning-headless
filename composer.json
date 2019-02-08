@@ -89,10 +89,7 @@
     "post-create-project-cmd": [
       "@drupal-scaffold",
       "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
-    ],
-    "release-version": "Acquia\\Lightning\\Composer\\ReleaseVersion::execute",
-    "pull": "Acquia\\Lightning\\Commands\\FileCommands::pull",
-    "push": "Acquia\\Lightning\\Commands\\FileCommands::push"
+    ]
   },
   "extra": {
     "installer-types": [
@@ -128,6 +125,21 @@
         "drush pm-uninstall block_content --yes"
       ],
       "export-configuration": "drush config-export --yes"
+    },
+    "drupal-scaffold": {
+      "source": "https://raw.githubusercontent.com/pantheon-systems/drops-8-scaffolding/8.6.9/{path}",
+      "includes": [
+        "sites/default/default.services.pantheon.preproduction.yml",
+        "sites/default/settings.pantheon.php"
+      ],
+      "excludes": [
+        ".csslintrc",
+        ".editorconfig",
+        ".eslintignore",
+        ".eslintrc.json",
+        ".htaccess",
+        "web.config"
+      ]
     },
     "enable-patching": true,
     "patchLevel": {
