@@ -1,5 +1,5 @@
 {
-  "name": "kanopi/headless_lightning",
+  "name": "kanopi/pantheon-headless-lightning",
   "description": "Drupal Lightning as a backend for fully decoupled applications.",
   "type": "drupal-profile",
   "license": "GPL-2.0-or-later",
