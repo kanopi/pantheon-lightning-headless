@@ -27,11 +27,14 @@ To spin up your new Pantheon site, Github repo, CircleCI integration run.
 
 Since this is a starter project you will need to edit some things and commit them to them to the Github repo that is created for your project.
 
-In `.docksal/docksal.env` you need to update the `TERMINUS_SITE` and `TERMINUS_ENVIRONMENT` variables.   
+In `.docksal/docksal.env` you need to update:
+* `TERMINUS_SITE` and `TERMINUS_ENVIRONMENT` variables to be the Pantheon project specific ones.
+* `VIRTUAL_HOST` to be project specific.
+   
 The `TERMINUS_ENVIRONMENT` will be the default DB download location and can probably be left at 'dev' initially.  This should be updated to whatever environment is considered canonical though.
 
 ## Local development
 
-As a developer working on this project you'll need to rename `.docksal/docksal-local.env.example` to `.docksal/docksal-local.env`.
+As a developer working on this project you'll need to **copy** `.docksal/docksal-local.env.example` to `.docksal/docksal-local.env`.
 
-Within that file you'll need to put your Terminus machine token for this project in. Machine tokens can be created in your [Pantheon account page](https://dashboard.pantheon.io/users/#account/tokens/).
+Within that file you'll need to put your Terminus machine token for this project in. Machine tokens can be created in your [Pantheon account page](https://dashboard.pantheon.io/users/#account/tokens/).  Once you have the machine token in you will be able to run terminus commands against Pantheon within Docksal, which is what is used to download the DB.
