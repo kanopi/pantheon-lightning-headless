@@ -1,7 +1,7 @@
 
 # Pantheon - Headless Lightning
 
-This is a "fork'ish" version of [Headless Lightning](https://github.com/acquia/headless-lightning) designed to be installed on Pantheon with their build tools process.
+This is a "fork'ish" version of [Acquia's Headless Lightning](https://github.com/acquia/headless-lightning) designed to be installed on Pantheon with their build tools process.
 
 ### Rational for "forking"
 
