@@ -42,7 +42,7 @@ docker:
   extensions:
     Behat\MinkExtension:
       # URL of the site when accessed inside Docksal.
-      base_url: http://mises-archive.docksal
+      base_url: http://web
       # Configure browser to be used. Browser must be available on wd_host.
       # Stick with chrome by default. It's 2x faster than firefox or phantomjs (your results may vary).
       browser_name: chrome
