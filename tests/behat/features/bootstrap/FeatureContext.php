@@ -3,6 +3,7 @@
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use Drupal\DrupalExtension\Hook\Scope\EntityScope;
 use Drupal\DrupalExtension\Context\MinkContext;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
@@ -142,6 +143,25 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     }
 
     /**
+     * Creates content of the given type.
+     *
+     * @Given I am viewing the node type of :type with the title :title
+     */
+    public function searchNodeTitleAndType($type, $title)
+    {
+
+      $sql = "SELECT n.nid FROM node_field_data n WHERE n.title = `${title}` AND n.type = `${type}`";
+      //$test = "SELECT n.nid FROM node_field_data n WHERE n.title = 'Chad Parish' AND n.type = 'person';";
+      var_export($sql);
+      $command = 'sqlq';
+      $result = $this->getDriver('drush')->$command($this->fixStepArgument($sql));
+      var_export($result);
+
+      $this->visitPath('/node/' . $result);
+    }
+
+
+  /**
      * @Given I wait :seconds seconds
      */
     public function iWaitSeconds($seconds)
@@ -232,10 +252,60 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
         $html = $page->getContent();
         $html = static::trimHead($html);
 
-        print "::::::::::::::::::::::::::::::::::::::::::::::::\n";
-        print $html . "\n";
-        print "::::::::::::::::::::::::::::::::::::::::::::::::\n";
+//        print "::::::::::::::::::::::::::::::::::::::::::::::::\n";
+//        print $html . "\n";
+//        print "::::::::::::::::::::::::::::::::::::::::::::::::\n";
     }
+
+  /**
+   * Before nodeCreate check field value for file, if present create file and replace with fid
+   * Field should be in format 'file;__file_source__;__file_name_
+   * @beforeNodeCreate
+   */
+  public function nodeCreateAlter(EntityScope $scope) {
+    $node = $scope->getEntity();
+    foreach ($node as $key => $value) {
+      if (strpos($value, 'file;') !== FALSE) {
+        $file_info = explode(';', $value);
+        $file_source = $file_info[1];
+        $file_name = $file_info[2];
+        $uri = file_unmanaged_copy($file_source, "public://$file_name", FILE_EXISTS_REPLACE);
+        $file = \Drupal\file\Entity\File::create(['uri' => $uri]);
+        $file->save();
+        $fid = $file->id();
+        $node->$key = $fid;
+      }
+    }
+  }
+
+  /**
+   * Returns fixed step argument (with \\" replaced back to ").
+   *
+   * @param string $argument
+   *
+   * @return string
+   */
+  protected function fixStepArgument($argument)
+  {
+    return str_replace('\\"', '"', $argument);
+  }
+
+  /**
+   * @AfterStep
+   */
+  public function takeScreenshotAfterFailedStep($event)
+  {
+    if ($event->getTestResult()->getResultCode() === \Behat\Testwork\Tester\Result\TestResult::FAILED) {
+      $driver = $this->getSession()->getDriver();
+      if ($driver instanceof \Behat\Mink\Driver\Selenium2Driver) {
+        $stepText = $event->getStep()->getText();
+        $fileName = preg_replace('#[^a-zA-Z0-9\._-]#', '', $stepText).'.png';
+        $filePath = sys_get_temp_dir();
+        $this->saveScreenshot($fileName, $filePath);
+        print "Screenshot for '{$stepText}' placed in ".$filePath.DIRECTORY_SEPARATOR.$fileName."\n";
+      }
+    }
+  }
 
     /**
      * Remove everything in the '<head>' element except the
