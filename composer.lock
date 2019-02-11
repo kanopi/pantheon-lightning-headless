@@ -1,11 +1,74 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8b1ce6e7a8aaa73ce7ceecad9313ae1d",
+    "content-hash": "5e5b9bcd75c1399fac53507e0fa2c179",
     "packages": [
+        {
+            "name": "acquia/headless_lightning",
+            "version": "1.4.0-beta4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/headless-lightning.git",
+                "reference": "8a8f7753da55fa0479037cd111c38e790a9ce2b8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/headless-lightning/zipball/8a8f7753da55fa0479037cd111c38e790a9ce2b8",
+                "reference": "8a8f7753da55fa0479037cd111c38e790a9ce2b8",
+                "shasum": ""
+            },
+            "require": {
+                "acquia/lightning": "3.2.4",
+                "cweagans/composer-patches": "^1.6.4",
+                "drupal-composer/drupal-scaffold": "^2.0.0"
+            },
+            "require-dev": {
+                "acquia/lightning_dev": "dev-8.x-1.x",
+                "drupal/console": "^1.0.0",
+                "drupal/devel": "^1.0",
+                "drupal/facets": "^1.2",
+                "drupal/schema_metatag": "^1.3"
+            },
+            "type": "drupal-profile",
+            "extra": {
+                "installer-types": [
+                    "bower-asset",
+                    "npm-asset"
+                ],
+                "installer-paths": {
+                    "docroot/core": [
+                        "type:drupal-core"
+                    ],
+                    "docroot/modules/contrib/{$name}": [
+                        "type:drupal-module"
+                    ],
+                    "docroot/profiles/contrib/{$name}": [
+                        "type:drupal-profile"
+                    ],
+                    "docroot/themes/contrib/{$name}": [
+                        "type:drupal-theme"
+                    ],
+                    "docroot/libraries/{$name}": [
+                        "type:drupal-library",
+                        "type:bower-asset",
+                        "type:npm-asset"
+                    ]
+                },
+                "enable-patching": true,
+                "patchLevel": {
+                    "drupal/core": "-p2"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Drupal Lightning as a backend for fully decoupled applications.",
+            "time": "2019-01-19T01:31:32+00:00"
+        },
         {
             "name": "acquia/lightning",
             "version": "3.2.4",
